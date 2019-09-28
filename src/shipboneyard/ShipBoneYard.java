@@ -5,6 +5,13 @@
  */
 package shipboneyard;
 
+
+import java.util.HashSet;
+import java.util.Set;
+import static shipboneyard.ShipBoneYardUI.printGameOutput;  // save typing
+import static shipboneyard.ShipBoneYardUI.printConsole;  // save typing
+import static shipboneyard.ShipBoneYardUI.getGameInput; 
+
 /**
  *
  * Ship Bone Yard adventure game
@@ -37,8 +44,37 @@ public class ShipBoneYard {
     public static void main(String[] args) {
         // TODO code application logic here
         System.out.println("Welcome to the Ship Boneyard Game");
+        
+        // Initialize UI and test output
+        ShipBoneYardUI ui = new ShipBoneYardUI();  // setup game window, ui unused
+        printGameOutput("game text area - Wreck of the Edmund Fitzgerald\n");
+        printConsole("console output\n");
+        
+        // Initial player next
+        Player player = new Player();  // prints welcome message too
+        
+        // Get Player name
+        String playerName = getGameInput("Enter player name> ");
+        if (!playerName.equals("")) {
+            player.setPlayerName(playerName);
+            player.printPlayerName();
+        }
+        
+        // Initialize parser
+        ParseInput parser = new ParseInput();
+        // get first player input - maybe use do While instead
+        String input = getGameInput("What's up?> ");
+        PlayerInput playerInput = parser.parseInput(input);
+        while (!playerInput.getPlayerText().equals("exit")) {
+            printGameOutput(playerInput.getPlayerText()+"\n");
+            
+            // next input line
+            input = getGameInput("What's up?> ");
+            playerInput = parser.parseInput(input);
+        }
+        printGameOutput("All done!\n");
+            
     }
-    
 }
 
 /**
@@ -47,6 +83,8 @@ public class ShipBoneYard {
  *      printConsole(<string>)
  *   Setup game output
  *      printGameOutput(<string>)
+ *   Get input from game window
+ *      String getGameInput()
  * 
  * Issues:
  *   Initially - string arg only, formatting done prior to calling
@@ -58,6 +96,8 @@ public class ShipBoneYard {
  * Consider:
  *   separate logging class, consider extending args
  *   destination totally within logging class
+ * 
+ * Note: if switch to multi-player, need static -> instance
  */
 
 /**
