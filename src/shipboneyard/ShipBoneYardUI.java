@@ -87,7 +87,4 @@ public class ShipBoneYardUI extends JFrame {
         return (userInput);
     }
     
-
-
-    
 }

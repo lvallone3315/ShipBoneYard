@@ -6,8 +6,6 @@
 package shipboneyard;
 
 
-import java.util.HashSet;
-import java.util.Set;
 import static shipboneyard.ShipBoneYardUI.printGameOutput;  // save typing
 import static shipboneyard.ShipBoneYardUI.printConsole;  // save typing
 import static shipboneyard.ShipBoneYardUI.getGameInput; 
@@ -52,6 +50,8 @@ public class ShipBoneYard {
         
         // Initial player next
         Player player = new Player();  // prints welcome message too
+        Room room = new Room(0); // initialize to starting location
+        room.printCurrentRoom();
         
         // Get Player name
         String playerName = getGameInput("Enter player name> ");
@@ -66,7 +66,13 @@ public class ShipBoneYard {
         String input = getGameInput("What's up?> ");
         PlayerInput playerInput = parser.parseInput(input);
         while (!playerInput.getPlayerText().equals("exit")) {
+  
             printGameOutput(playerInput.getPlayerText()+"\n");
+            
+            // switch on type of input - e.g. move in a direction
+            // create room class and first room (derived from room class)
+            room = room.processUserRequest(playerInput);
+            room.printCurrentRoom();
             
             // next input line
             input = getGameInput("What's up?> ");
