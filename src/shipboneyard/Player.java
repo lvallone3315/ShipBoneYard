@@ -31,15 +31,15 @@ public class Player {
     
     Player(String name) {
         playerName = name;   // note: not checking null player name
-        this.printPlayerName();
+        LogToConsole.log(printPlayerName());
     }
     
     Player() {
         this(DEFAULT_PLAYER);  // "this" refers to constructor
     }
     
-    public void printPlayerName() {
-        ShipBoneYardUI.printGameOutput("Welcome " + playerName + "\n");
+    public String printPlayerName() {
+        return ("Player name: " + getPlayerName() + "\n");
     }
     
     public String getPlayerName() {
@@ -51,7 +51,7 @@ public class Player {
             playerName = name;
         }
         else {
-            ShipBoneYardUI.printConsole("Null player name entered\n");
+            LogToConsole.log("Null player name entered\n");
         }
     }
 

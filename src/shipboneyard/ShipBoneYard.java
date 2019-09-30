@@ -9,6 +9,7 @@ package shipboneyard;
 import static shipboneyard.ShipBoneYardUI.printGameOutput;  // save typing
 import static shipboneyard.ShipBoneYardUI.printConsole;  // save typing
 import static shipboneyard.ShipBoneYardUI.getGameInput; 
+import static shipboneyard.LogToConsole.log;
 
 /**
  *
@@ -22,6 +23,11 @@ import static shipboneyard.ShipBoneYardUI.getGameInput;
  * @author leev
  */
 public class ShipBoneYard {
+    
+    static final int STARTING_ROOM = 0;  // ToDo: switch to enum
+    static final String INTRO_1 = "Welcome to the Ship Boneyard Game";
+    static final String INTRO_2 = "game text area - Wreck of the Edmund Fitzgerald\n";
+    static final String PLAYER_NAME_REQ = "Enter player name> ";
 
     /**
      * @param args the command line arguments
@@ -41,24 +47,26 @@ public class ShipBoneYard {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        System.out.println("Welcome to the Ship Boneyard Game");
+        System.out.println(INTRO_1);
         
         // Initialize UI and test output
         ShipBoneYardUI ui = new ShipBoneYardUI();  // setup game window, ui unused
-        printGameOutput("game text area - Wreck of the Edmund Fitzgerald\n");
-        printConsole("console output\n");
+        printGameOutput(INTRO_2);
+        log("This is the console output\n");
         
-        // Initial player next
+        // Initial player
         Player player = new Player();  // prints welcome message too
-        Room room = new Room(0); // initialize to starting location
-        room.printCurrentRoom();
-        
-        // Get Player name
-        String playerName = getGameInput("Enter player name> ");
-        if (!playerName.equals("")) {
+ 
+        // Request user to enter player name
+        //   if no player name entered, player class will use a default name
+        String playerName = getGameInput(PLAYER_NAME_REQ);
+        if (!playerName.equals("")) {  // if nothing entered, use default name
             player.setPlayerName(playerName);
-            player.printPlayerName();
         }
+        ShipBoneYardUI.printGameOutput("Welcome " + player.getPlayerName() + "\n");
+        
+        Room room = new Room(STARTING_ROOM); // initialize to starting location
+        room.printCurrentRoom();  // log information to console
         
         // Initialize parser
         ParseInput parser = new ParseInput();
@@ -72,13 +80,24 @@ public class ShipBoneYard {
             // switch on type of input - e.g. move in a direction
             // create room class and first room (derived from room class)
             room = room.processUserRequest(playerInput);
-            room.printCurrentRoom();
+            printGameOutput(room.getLongDescription());
+               // log room info to console - maybe do this in room class
+            room.printCurrentRoom();  
             
             // next input line
             input = getGameInput("What's up?> ");
             playerInput = parser.parseInput(input);
         }
         printGameOutput("All done!\n");
+        
+        // sleep 5 seconds & exit
+        //   *** redo this later - maybe ask for key to exit
+        try {
+            Thread.sleep(5000);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        System.exit(0);
             
     }
 }

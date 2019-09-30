@@ -29,7 +29,9 @@ import static shipboneyard.ShipBoneYardUI.printConsole;
  */
 public class PlayerInput {
     public enum InputType {DIRECTION,VERB,OTHER};
+    public enum Direction {N, S, E, W, NA};
     private InputType inputType;
+    private Direction direction;
     private String playerText;  // player text
         
     public void setPlayerText(String text) {
@@ -44,6 +46,12 @@ public class PlayerInput {
     }
     public InputType getInputType () {
         return this.inputType;
+    }
+    public void setDirection (Direction dir) {
+        this.direction = dir;
+    }
+    public Direction getDirection () {
+        return this.direction;
     }
     public void printPlayerInput() {
         String printString;

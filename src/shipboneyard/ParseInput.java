@@ -5,7 +5,9 @@
  */
 package shipboneyard;
 
+// PlayerInput enums
 import static shipboneyard.PlayerInput.InputType;
+import static shipboneyard.PlayerInput.Direction;
 
 /**
  * ParseInput Class
@@ -18,6 +20,9 @@ import static shipboneyard.PlayerInput.InputType;
  * 
  * Issues:
  *   need to create structure & verify can access in main class, incl ENUM
+ * 
+ * Future:
+ *    Change from switch statement to final structure (or populate from file)
  *   
  * @author leev
  */
@@ -30,13 +35,41 @@ public class ParseInput {
     }
     
     PlayerInput parseInput(String string) {
-        if (string.equals("N")) {
-            playerInput.setInputType(InputType.DIRECTION);
+        String normalizedString = string;
+        // remove leading and trailing whitespace (string.trim)
+        // standardize string to lower case
+        normalizedString = normalizedString.trim();
+        normalizedString = normalizedString.toLowerCase();
+        LogToConsole.log(string + " ->" + normalizedString);
+        
+        // check for direction
+        switch (normalizedString) {
+            case "north":
+            case "n":
+                playerInput.setInputType(InputType.DIRECTION);
+                playerInput.setDirection(Direction.N);
+                break;
+            case "south":
+            case "s":
+                playerInput.setInputType(InputType.DIRECTION);
+                playerInput.setDirection(Direction.S);
+                break;
+            case "east":
+            case "e":
+                playerInput.setInputType(InputType.DIRECTION);
+                playerInput.setDirection(Direction.E);
+                break;
+            case "west":
+            case "w":
+                playerInput.setInputType(InputType.DIRECTION);
+                playerInput.setDirection(Direction.W);
+                break;
+            default:
+                playerInput.setInputType(InputType.OTHER);
+                playerInput.setDirection(Direction.NA);
         }
-        else
-            playerInput.setInputType(InputType.OTHER);
-        playerInput.setPlayerText(string);
-        playerInput.printPlayerInput();
+        playerInput.setPlayerText(normalizedString);
+        playerInput.printPlayerInput(); // prints to console, should use log
         return playerInput;
     }
 }
