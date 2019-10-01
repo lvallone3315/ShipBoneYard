@@ -40,7 +40,7 @@ public class ParseInput {
         // standardize string to lower case
         normalizedString = normalizedString.trim();
         normalizedString = normalizedString.toLowerCase();
-        LogToConsole.log(string + " ->" + normalizedString);
+        LogToConsole.log(string + " ->" + normalizedString + "\n");
         
         // check for direction
         switch (normalizedString) {

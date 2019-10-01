@@ -65,8 +65,8 @@ public class ShipBoneYard {
         }
         ShipBoneYardUI.printGameOutput("Welcome " + player.getPlayerName() + "\n");
         
-        Room room = new Room(STARTING_ROOM); // initialize to starting location
-        room.printCurrentRoom();  // log information to console
+        // initialize to starting location
+        Room room = Room.startingRoom();
         
         // Initialize parser
         ParseInput parser = new ParseInput();
@@ -75,10 +75,11 @@ public class ShipBoneYard {
         PlayerInput playerInput = parser.parseInput(input);
         while (!playerInput.getPlayerText().equals("exit")) {
   
+            // echo player's input to game screen
             printGameOutput(playerInput.getPlayerText()+"\n");
             
             // switch on type of input - e.g. move in a direction
-            // create room class and first room (derived from room class)
+            // process method returns pointer to next (or same) room
             room = room.processUserRequest(playerInput);
             printGameOutput(room.getLongDescription());
                // log room info to console - maybe do this in room class

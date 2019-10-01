@@ -47,7 +47,7 @@ public class Player {
     }
     
     public void setPlayerName(String name) {
-        if (name != "") {   // don't allow null player names
+        if (!name.equals("")) {   // don't allow null player names
             playerName = name;
         }
         else {

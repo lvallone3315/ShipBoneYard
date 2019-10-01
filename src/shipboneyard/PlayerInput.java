@@ -53,7 +53,7 @@ public class PlayerInput {
     public Direction getDirection () {
         return this.direction;
     }
-    public void printPlayerInput() {
+    public String toString() {
         String printString;
         
         switch (this.inputType) {
@@ -70,6 +70,9 @@ public class PlayerInput {
                 printString = "unknown";
         }
         printString += "\tplayerText: " + this.playerText + "\n";
-        printConsole(printString);
+        return(printString);
+    }
+    public void printPlayerInput() {
+        printConsole(this.toString());
     }
 }

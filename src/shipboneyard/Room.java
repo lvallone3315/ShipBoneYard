@@ -48,9 +48,10 @@ class InitialRoom {
     int roomToSouth;
     int roomToEast;
     int roomToWest;
+    boolean visited;
     
     InitialRoom (int number, String name, String shortDes, String longDes,
-            int north, int south, int east, int west) {
+            int north, int south, int east, int west, boolean visited) {
         this.roomNumber = number;
         this.roomName = name;
         this.shortDescription = shortDes;
@@ -59,92 +60,74 @@ class InitialRoom {
         this.roomToSouth = south;
         this.roomToEast = east;
         this.roomToWest = west;
+        this.visited = visited;
     }
 }
 
-class CurrentRoom {
-    int roomNumber;
-    String roomName;
-    String shortDescription;
-    String longDescription;
-    int roomToNorth;
-    int roomToSouth;
-    int roomToEast;
-    int roomToWest;
-    boolean visited = false;
-}
-
 public class Room {
+    
+    /**
+     * Room Class (base class for all locations)
+     * 
+     * initialRoomList[] details of all locations indexed by roomNumber
+     */
     private static final InitialRoom[] initialRoomList = {
         new InitialRoom(0, "Gatehouse", "Gatehouse\n",
                 "You are at the Gatehouse, there is a road to the North\n",
-                1, 1, 0, 0),
+                1, 1, 0, 0, false),
         new InitialRoom(1, "North Road", "North Road\n",
                 "You are on a paved road running north & south\n",
-                1, 1, 0, 1)
+                1, 1, 0, 1, false)
     };
-    private CurrentRoom currentRoom;
     
-    // Contructor
-    // creates a new room object, and defines it as the current room
-    //   note - will need to make sure old room pointers are maintained
-    // copies initial room information to current room object
+    /** roomObjects initialized with derived class rooms
+     *  room logic in derived classes
+     *  roomNumber = instance variable with roomNumber for each derived class
+     */
+    
+    public static Room[] roomObjects = { new GateHouse0(0), new NorthRoad(1) };
+    public int roomNumber;
+    
+    private static int STARTING_ROOM_NUM = 0;
+    
+    /**
+     * Constructor
+     * creates a new room object, and initializes the roomNumber instance var
+     */
     Room(int roomNum) {
-        currentRoom = new CurrentRoom();
-        currentRoom.roomNumber = initialRoomList[roomNum].roomNumber;
-        currentRoom.roomName = initialRoomList[roomNum].roomName;
-        currentRoom.shortDescription = initialRoomList[roomNum].shortDescription;
-        currentRoom.longDescription = initialRoomList[roomNum].longDescription;
-        currentRoom.roomToNorth = initialRoomList[roomNum].roomToNorth;
-        currentRoom.roomToSouth = initialRoomList[roomNum].roomToSouth;
-        currentRoom.roomToEast = initialRoomList[roomNum].roomToEast;
-        currentRoom.roomToWest = initialRoomList[roomNum].roomToWest;
-        currentRoom.visited = true;
+        roomNumber = roomNum;
+    }
+    
+    /**
+     * startingRoom - initial game location
+     * @return - returns pointer to derived object of starting location
+     */
+    public static Room startingRoom() {
+        return roomObjects[STARTING_ROOM_NUM];
     }
     
     public Room processUserRequest(PlayerInput playerInput) {
         /**
-         * Directional changes
-         *   check if room object already created, if not create it
-         *     alt: create all room objects at startup
-         *   either way: need array of room object pointers
-         * 
-         *  challenging part - how to execute derived class method
-         *  
-         *  To start - big switch statement based on room #
-         *    call appropriate room method with playerInput
-         *    method returns room pointer which becomes the new current room
+         *     Base Class - should never get here - probably should assert
          */
-        switch (currentRoom.roomNumber) {
-            case 0:
-                if (playerInput.getInputType() == PlayerInput.InputType.DIRECTION) {
-                    int newRoom = moveDirection(playerInput.getDirection());
-                    LogToConsole.log("new room = " + newRoom);
-                    return (new Room(newRoom));
-                }
-            case 1:
-                if (playerInput.getInputType() == PlayerInput.InputType.DIRECTION) {
-                    int newRoom = moveDirection(playerInput.getDirection());
-                    LogToConsole.log("new room = " + newRoom);
-                    return (new Room(newRoom));
-                }
-            default:                
-                return (new Room(1));
-        }
+        printConsole("BASE CLASS: processUserRequest of " + playerInput.toString());  
+        
+        // back to go
+        return roomObjects[STARTING_ROOM_NUM];
     }
     
-    public int moveDirection(PlayerInput.Direction dir) {
+    public int moveDirection(int roomNum, PlayerInput.Direction dir) {
         switch (dir) {
             case N:
-                return currentRoom.roomToNorth;
+                return initialRoomList[roomNum].roomToNorth;
             case S:
-                return currentRoom.roomToSouth;
+                return initialRoomList[roomNum].roomToSouth;
             case E:
-                return currentRoom.roomToEast;
+                return initialRoomList[roomNum].roomToEast;
             case W:
-                return currentRoom.roomToWest;
+                return initialRoomList[roomNum].roomToWest;
             default:
-                return currentRoom.roomNumber;
+                return initialRoomList[roomNum].roomNumber;
         }
     }
     
@@ -154,7 +137,7 @@ public class Room {
      * @return - String containing short description of current room
      */
     public String getShortDescription() {
-        return currentRoom.shortDescription;
+        return (initialRoomList[roomNumber].shortDescription);
     }
     
     /**
@@ -162,17 +145,17 @@ public class Room {
      * @return - String containing long description of current room
      */
     public String getLongDescription() {
-        return currentRoom.longDescription;
+        return (initialRoomList[roomNumber].longDescription);
     }
     
     //
     public void printCurrentRoom() {
         String printString = new String();
-        printString = "Room #: " + currentRoom.roomNumber + "\n";
-        printString += "Room name: " + currentRoom.roomName + "\n";
-        printString += "Short Desc: " + currentRoom.shortDescription + "\n";
-        printString += "Long Desc: " + currentRoom.longDescription + "\n";
-        printString += "Visited: " + currentRoom.visited + "\n";
+        printString = "Room #: " + initialRoomList[roomNumber].roomNumber + "\n";
+        printString += "Room name: " + initialRoomList[roomNumber].roomName + "\n";
+        printString += "Short Desc: " + initialRoomList[roomNumber].shortDescription + "\n";
+        printString += "Long Desc: " + initialRoomList[roomNumber].longDescription + "\n";
+        printString += "Visited: " + initialRoomList[roomNumber].visited + "\n";
         printConsole(printString); 
     }
 }
