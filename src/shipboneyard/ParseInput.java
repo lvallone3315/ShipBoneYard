@@ -21,6 +21,10 @@ import static shipboneyard.PlayerInput.Direction;
  * Issues:
  *   need to create structure & verify can access in main class, incl ENUM
  * 
+ * ToDo:
+ *   add exit type
+ *   either accept verbs such as move, go, etc. or search for directions in string
+ * 
  * Future:
  *    Change from switch statement to final structure (or populate from file)
  *   
@@ -40,7 +44,7 @@ public class ParseInput {
         // standardize string to lower case
         normalizedString = normalizedString.trim();
         normalizedString = normalizedString.toLowerCase();
-        LogToConsole.log(string + " ->" + normalizedString + "\n");
+        LogToConsole.log("Parser: " + string + " ->" + normalizedString + "\n");
         
         // check for direction
         switch (normalizedString) {
@@ -72,4 +76,5 @@ public class ParseInput {
         playerInput.printPlayerInput(); // prints to console, should use log
         return playerInput;
     }
+    
 }

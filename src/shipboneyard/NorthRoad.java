@@ -21,6 +21,7 @@ public class NorthRoad extends Room {
     @Override
     public Room processUserRequest(PlayerInput playerInput) {
         printConsole("North Road " + playerInput.toString());
+        setRoomVisited(true);
         if (playerInput.getInputType() == PlayerInput.InputType.DIRECTION) {
             int newRoom = moveDirection(roomNumber, playerInput.getDirection());
             LogToConsole.log("North Road: new room = " + newRoom + "\n");

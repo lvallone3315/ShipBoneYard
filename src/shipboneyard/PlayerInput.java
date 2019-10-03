@@ -5,6 +5,7 @@
  */
 package shipboneyard;
 
+import static shipboneyard.PlayerInput.InputType.DIRECTION;
 import static shipboneyard.ShipBoneYardUI.printConsole;
 
 /**
@@ -58,17 +59,26 @@ public class PlayerInput {
         
         switch (this.inputType) {
             case DIRECTION:
-                printString = "Direction";
-                break;
             case VERB:
-                printString = "VERB";
-                break;
             case OTHER:
-                printString = "OTHER";
+                printString = " " + this.inputType;
                 break;
             default:
                 printString = "unknown";
         }
+        if (this.inputType == DIRECTION) {
+            switch (this.direction) {
+            case N:
+            case S:
+            case E:
+            case W:
+                printString += " " + this.direction;
+                break;
+            default:
+                printString += "ERROR: invalid direction" + this.direction;
+            }
+                
+        } // end if DIRECTION
         printString += "\tplayerText: " + this.playerText + "\n";
         return(printString);
     }

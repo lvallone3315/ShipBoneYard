@@ -72,11 +72,11 @@ public class Room {
      * initialRoomList[] details of all locations indexed by roomNumber
      */
     private static final InitialRoom[] initialRoomList = {
-        new InitialRoom(0, "Gatehouse", "Gatehouse\n",
-                "You are at the Gatehouse, there is a road to the North\n",
+        new InitialRoom(0, "Gatehouse", "Gatehouse",
+                "You are at the Gatehouse, there is a road to the North",
                 1, 1, 0, 0, false),
-        new InitialRoom(1, "North Road", "North Road\n",
-                "You are on a paved road running north & south\n",
+        new InitialRoom(1, "North Road", "North Road",
+                "You are on a paved road running north & south",
                 1, 1, 0, 1, false)
     };
     
@@ -85,8 +85,8 @@ public class Room {
      *  roomNumber = instance variable with roomNumber for each derived class
      */
     
-    public static Room[] roomObjects = { new GateHouse0(0), new NorthRoad(1) };
-    public int roomNumber;
+    protected static Room[] roomObjects = { new GateHouse0(0), new NorthRoad(1) };
+    protected int roomNumber;
     
     private static int STARTING_ROOM_NUM = 0;
     
@@ -116,7 +116,7 @@ public class Room {
         return roomObjects[STARTING_ROOM_NUM];
     }
     
-    public int moveDirection(int roomNum, PlayerInput.Direction dir) {
+    protected int moveDirection(int roomNum, PlayerInput.Direction dir) {
         switch (dir) {
             case N:
                 return initialRoomList[roomNum].roomToNorth;
@@ -146,6 +146,18 @@ public class Room {
      */
     public String getLongDescription() {
         return (initialRoomList[roomNumber].longDescription);
+    }
+    
+    /**
+     * getRoomVisited()
+     * @return Boolean - true if previously visited room
+     */
+    public Boolean getRoomVisited() {
+        return (initialRoomList[roomNumber].visited);
+    }
+    
+    public void setRoomVisited(Boolean visited) {
+        initialRoomList[roomNumber].visited = visited;
     }
     
     //

@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package shipboneyard;
 
 
@@ -24,13 +20,22 @@ import static shipboneyard.LogToConsole.log;
  */
 public class ShipBoneYard {
     
+    // Version #, should be in separate file, e.g. version.txt
+    //   update with every GIT commit
+    static final String VERSION = "Version 0.1\n";    // current version #
+    
     static final int STARTING_ROOM = 0;  // ToDo: switch to enum
-    static final String INTRO_1 = "Welcome to the Ship Boneyard Game";
+    static final String INTRO_1 = "\t\tWelcome to the Ship Boneyard Game\n\n"; 
     static final String INTRO_2 = "game text area - Wreck of the Edmund Fitzgerald\n";
+    static final String DESCRIPTION = 
+            "You are entering a graveyard of old ships.\n"
+            + "Your objective is to explore (and survive)\n"
+            + "You can move around with simple commands (e.g. north)\n"
+            + "Please close the window or type <exit> to quit the game\n";
     static final String PLAYER_NAME_REQ = "Enter player name> ";
 
     /**
-     * @param args the command line arguments
+     * @param args the command line arguments (none at this time)
      * 
      * Initialize player & initial room objects
      * Main loop:
@@ -46,12 +51,15 @@ public class ShipBoneYard {
      *    console interface - debugging & other info
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        // Print game intro on console
         System.out.println(INTRO_1);
+        System.out.println(VERSION);
         
         // Initialize UI and test output
         ShipBoneYardUI ui = new ShipBoneYardUI();  // setup game window, ui unused
-        printGameOutput(INTRO_2);
+        printGameOutput(INTRO_1);
+        printGameOutput(VERSION);
+        printGameOutput(DESCRIPTION);
         log("This is the console output\n");
         
         // Initial player
@@ -59,18 +67,31 @@ public class ShipBoneYard {
  
         // Request user to enter player name
         //   if no player name entered, player class will use a default name
+        //   if player name entered - print welcome message to game window
         String playerName = getGameInput(PLAYER_NAME_REQ);
-        if (!playerName.equals("")) {  // if nothing entered, use default name
+        if (!playerName.equals("")) {
             player.setPlayerName(playerName);
+            player.printPlayerName();  // prints new player name to log
         }
         ShipBoneYardUI.printGameOutput("Welcome " + player.getPlayerName() + "\n");
         
-        // initialize to starting location
+        // initialize starting location
         Room room = Room.startingRoom();
         
         // Initialize parser
         ParseInput parser = new ParseInput();
-        // get first player input - maybe use do While instead
+        
+        // Main loop
+        //   get first player input - maybe use do While instead
+        //   while player hasn't quit
+        //      get player's input (ie typing)
+        //      send input to room logic (derived object of Room base class)
+        //      move to new room (if applicable)
+        //
+        // ToDo:
+        //   Move prompts to constants
+        //   Consider moving description print elsewhere (and using short des if visited)
+        //   Define an exit type in the parser (ie accept done, quit, exit...)
         String input = getGameInput("What's up?> ");
         PlayerInput playerInput = parser.parseInput(input);
         while (!playerInput.getPlayerText().equals("exit")) {
@@ -89,6 +110,7 @@ public class ShipBoneYard {
             input = getGameInput("What's up?> ");
             playerInput = parser.parseInput(input);
         }
+        
         printGameOutput("All done!\n");
         
         // sleep 5 seconds & exit

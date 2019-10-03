@@ -28,7 +28,8 @@ public class GateHouse0 extends Room {
 
     @Override
     public Room processUserRequest(PlayerInput playerInput) {
-        printConsole("GateHouse0 " + playerInput.toString());
+        printConsole("GateHouse0: Input " + playerInput.toString());
+        setRoomVisited(true);
         if (playerInput.getInputType() == PlayerInput.InputType.DIRECTION) {
             int newRoom = moveDirection(roomNumber, playerInput.getDirection());
             LogToConsole.log("GateHouse0: new room = " + newRoom + "\n");

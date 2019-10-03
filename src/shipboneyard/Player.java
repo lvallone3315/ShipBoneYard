@@ -20,7 +20,10 @@ package shipboneyard;
  * Design considerations:
  *   In future may create multi-player version
  *     possible issue w/ required items
- *  *
+ *
+ * Updates: 
+ *   1-October - added Doc comments & toString() method
+ * 
  * @author leev
  */
 
@@ -29,30 +32,59 @@ public class Player {
     
     private String playerName;
     
+    /**
+     * Player Constructors
+     *   two variants - no parameter -> uses DEFAULT_PLAYER name
+     *     if parameter passed -> store String as player name
+     *   prints player name to console log
+     * @param name 
+     */
     Player(String name) {
         playerName = name;   // note: not checking null player name
-        LogToConsole.log(printPlayerName());
+        printPlayerName();
     }
     
     Player() {
         this(DEFAULT_PLAYER);  // "this" refers to constructor
     }
     
-    public String printPlayerName() {
-        return ("Player name: " + getPlayerName() + "\n");
-    }
-    
+    /**
+     * getPlayerName()
+     * @return player name associated with player object
+     */
     public String getPlayerName() {
         return playerName;
     }
     
+    /**
+     *  setPlayerName()
+     *     if blank player name entered, log error to console
+     * @param name - player name associated with player instance
+     */
     public void setPlayerName(String name) {
         if (!name.equals("")) {   // don't allow null player names
             playerName = name;
         }
         else {
-            LogToConsole.log("Null player name entered\n");
+            LogToConsole.log("ERROR: Null player name entered\n");
         }
     }
-
+    
+    /**
+     * toString() 
+     * @return returns formatted player instance information
+     */
+    public String toString() {
+        String returnString = "Player Name: " + getPlayerName() + "\n";
+        return (returnString);
+    }
+    
+    /**
+     * printPlayerName() to console log <br>
+     *   uses toString() method
+     */
+    public void printPlayerName() {
+        LogToConsole.log(this.toString());
+    }
+    
 }
