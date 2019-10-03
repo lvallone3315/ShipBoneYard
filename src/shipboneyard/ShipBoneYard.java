@@ -5,6 +5,7 @@ package shipboneyard;
 import static shipboneyard.ShipBoneYardUI.printGameOutput;  // save typing
 import static shipboneyard.ShipBoneYardUI.printConsole;  // save typing
 import static shipboneyard.ShipBoneYardUI.getGameInput; 
+import static shipboneyard.PlayerInput.InputType;
 import static shipboneyard.LogToConsole.log;
 
 /**
@@ -22,7 +23,7 @@ public class ShipBoneYard {
     
     // Version #, should be in separate file, e.g. version.txt
     //   update with every GIT commit
-    static final String VERSION = "Version 0.1\n";    // current version #
+    static final String VERSION = "Version 0.2\n";    // current version #
     
     static final int STARTING_ROOM = 0;  // ToDo: switch to enum
     static final String INTRO_1 = "\t\tWelcome to the Ship Boneyard Game\n\n"; 
@@ -94,7 +95,7 @@ public class ShipBoneYard {
         //   Define an exit type in the parser (ie accept done, quit, exit...)
         String input = getGameInput("What's up?> ");
         PlayerInput playerInput = parser.parseInput(input);
-        while (!playerInput.getPlayerText().equals("exit")) {
+        while (playerInput.getInputType() != InputType.EXIT) {
   
             // echo player's input to game screen
             printGameOutput(playerInput.getPlayerText()+"\n");

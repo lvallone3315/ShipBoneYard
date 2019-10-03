@@ -40,14 +40,38 @@ public class ParseInput {
     
     PlayerInput parseInput(String string) {
         String normalizedString = string;
+        String actionString = string;
+        Boolean error = false;
         // remove leading and trailing whitespace (string.trim)
-        // standardize string to lower case
+        // normalize string to lower case
+        //    save normalized string to playerInput structure
         normalizedString = normalizedString.trim();
         normalizedString = normalizedString.toLowerCase();
+        playerInput.setPlayerText(normalizedString);
         LogToConsole.log("Parser: " + string + " ->" + normalizedString + "\n");
         
+        // break into words separated by white space
+        String[] stringWords = normalizedString.split("\\s+",2);
+        
+        // if two (or more words), parse first word
+        switch (stringWords[0]) {
+            case "go":
+            case "move":
+                if (stringWords.length < 2) {
+                    playerInput.setInputType(InputType.DIRECTIONERR);
+                    playerInput.setDirection(Direction.NA);
+                    error = true;
+                }
+                else {
+                    actionString = stringWords[1];
+                }
+                break;
+            default:
+                actionString = stringWords[0];
+        }
+
         // check for direction
-        switch (normalizedString) {
+        if (!error) switch (actionString) {
             case "north":
             case "n":
                 playerInput.setInputType(InputType.DIRECTION);
@@ -68,11 +92,18 @@ public class ParseInput {
                 playerInput.setInputType(InputType.DIRECTION);
                 playerInput.setDirection(Direction.W);
                 break;
+            case "exit":
+            case "quit":
+            case "done":
+            case "bye":
+                playerInput.setInputType(InputType.EXIT);
+                playerInput.setDirection(Direction.W);
+                break;
             default:
                 playerInput.setInputType(InputType.OTHER);
                 playerInput.setDirection(Direction.NA);
         }
-        playerInput.setPlayerText(normalizedString);
+
         playerInput.printPlayerInput(); // prints to console, should use log
         return playerInput;
     }

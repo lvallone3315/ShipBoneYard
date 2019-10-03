@@ -72,11 +72,11 @@ public class Room {
      * initialRoomList[] details of all locations indexed by roomNumber
      */
     private static final InitialRoom[] initialRoomList = {
-        new InitialRoom(0, "Gatehouse", "Gatehouse",
-                "You are at the Gatehouse, there is a road to the North",
+        new InitialRoom(0, "Gatehouse", "Gatehouse\n",
+                "You are at the Gatehouse, there is a road to the North\n",
                 1, 1, 0, 0, false),
-        new InitialRoom(1, "North Road", "North Road",
-                "You are on a paved road running north & south",
+        new InitialRoom(1, "North Road", "North Road\n",
+                "You are on a paved road running north & south\n",
                 1, 1, 0, 1, false)
     };
     
@@ -165,8 +165,8 @@ public class Room {
         String printString = new String();
         printString = "Room #: " + initialRoomList[roomNumber].roomNumber + "\n";
         printString += "Room name: " + initialRoomList[roomNumber].roomName + "\n";
-        printString += "Short Desc: " + initialRoomList[roomNumber].shortDescription + "\n";
-        printString += "Long Desc: " + initialRoomList[roomNumber].longDescription + "\n";
+        printString += "Short Desc: " + initialRoomList[roomNumber].shortDescription;
+        printString += "Long Desc: " + initialRoomList[roomNumber].longDescription;
         printString += "Visited: " + initialRoomList[roomNumber].visited + "\n";
         printConsole(printString); 
     }

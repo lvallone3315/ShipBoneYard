@@ -29,7 +29,7 @@ import static shipboneyard.ShipBoneYardUI.printConsole;
  * @author leev
  */
 public class PlayerInput {
-    public enum InputType {DIRECTION,VERB,OTHER};
+    public enum InputType {DIRECTION,DIRECTIONERR, VERB, EXIT, OTHER};
     public enum Direction {N, S, E, W, NA};
     private InputType inputType;
     private Direction direction;
@@ -61,6 +61,8 @@ public class PlayerInput {
             case DIRECTION:
             case VERB:
             case OTHER:
+            case DIRECTIONERR:
+            case EXIT:
                 printString = " " + this.inputType;
                 break;
             default:
