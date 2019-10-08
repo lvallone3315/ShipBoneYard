@@ -54,9 +54,11 @@ public class ParseInput {
         String[] stringWords = normalizedString.split("\\s+",2);
         
         // if two (or more words), parse first word
+        //   
         switch (stringWords[0]) {
             case "go":
             case "move":
+            case "run":
                 if (stringWords.length < 2) {
                     playerInput.setInputType(InputType.DIRECTIONERR);
                     playerInput.setDirection(Direction.NA);
