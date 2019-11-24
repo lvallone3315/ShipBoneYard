@@ -33,6 +33,8 @@ import javax.swing.JTextArea;
  *   separate logging class, consider extending args
  *   destination totally within logging class
  * 
+ * ToDo: UI class currently static, refactor as instance
+ * 
  * Note: if switch to multi-player, need static -> instance
  *
  * @author leev
@@ -48,6 +50,8 @@ public class ShipBoneYardUI extends JFrame {
     
     static final String GAME_TEXT = "Ship Bone Yard game";
     static final String DEFAULT_PROMPT = "> ";
+    
+    private static Log logUserInput = new Log();  // input logging setup
     
     /**
      * Constructor - set up JFRAME for Game Output
@@ -97,10 +101,12 @@ public class ShipBoneYardUI extends JFrame {
 
     static String getGameInput(String output) {
         String input = JOptionPane.showInputDialog(frame, output);
+        logUserInput.logUserInput(input);
         return input;
     }
     static String getGameInput() {
         String input = JOptionPane.showInputDialog(frame, DEFAULT_PROMPT);
+        logUserInput.logUserInput(input);
         return input;
     }
     

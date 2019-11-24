@@ -63,6 +63,7 @@ public class ShipBoneYard {
         printGameOutput(DESCRIPTION);
         log("This is the console output\n");
         
+        
         // Initial player
         Player player = new Player();  // prints welcome message too
  
