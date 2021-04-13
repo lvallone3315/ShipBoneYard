@@ -35,9 +35,9 @@ public class ShipBoneYardInventoryTest {
     public void testItemValidity() {
         Item item = new Item();
         System.out.println("testing if axe is a valid item ...");
-        assertEquals(item.isItemValid("axe"), true);
+        assertTrue("Axe is NOT valid",item.isItemValid("axe"));
         System.out.println("Verifying mace is not a valid item ...");
-        assertEquals(item.isItemValid("mace"), false);
+        assertFalse("Mace IS valid", item.isItemValid("mace"));
     }
     
     @Test
@@ -45,11 +45,11 @@ public class ShipBoneYardInventoryTest {
         Item item = new Item();
         
         System.out.println("convert axe string to Enum & then back to String");
-        assertEquals(item.itemStringToEnum("axe"), Item.ItemType.BATTLE_AXE);
-        assertEquals(item.itemEnumToString(Item.ItemType.BATTLE_AXE), "axe");
+        assertEquals("Axe != BATTLE_AXE enum", item.itemStringToEnum("axe"), Item.ItemType.BATTLE_AXE);
+        assertEquals("BATTLE_AXE enum != axe", item.itemEnumToString(Item.ItemType.BATTLE_AXE), "axe");
         
         System.out.println("verify null is returned if an invalid item, e.g. lance, passed");
-        assertEquals(item.itemStringToEnum("lance"), null);
+        assertNull("Lance is accpepted as valid item", item.itemStringToEnum("lance"));
     }
     
     // Test displaying inventory, adding axe, displaying inventory,
@@ -58,13 +58,15 @@ public class ShipBoneYardInventoryTest {
     public void testInventorySunnyDay() {
         Inventory inventory = new Inventory();
         
+        System.out.println("\n*** Testing Sunny Day Scenarios ***");
         System.out.println("Verify initial backpack is empty" + "***" + inventory.inventory()+"***");
-        assertEquals(inventory.inventory(), "");
-        assertEquals(inventory.takeItem("axe"), true);
+        assertEquals("Initial inventory is NOT empty", inventory.inventory(), "");
+        assertTrue("axe not added to inventory", inventory.takeItem("axe"));
         System.out.println("Verify backpack now has an axe" + "***" + inventory.inventory()+"***");
-        assertEquals(inventory.inventory(), "axe");
-        assertEquals(inventory.dropItem("axe"), true);
+        assertEquals("axe is NOT in the inventory after adding", inventory.inventory(), "axe");
+        assertTrue("Not able to drop the axe", inventory.dropItem("axe"));
         System.out.println("Verify backpack is again empty" + "***" + inventory.inventory()+"***");
+        assertEquals("Inventory is NOT empty, but should be, after removing axe", inventory.inventory(), "");
     }
     
     // Test rainy day scenarios
@@ -75,17 +77,17 @@ public class ShipBoneYardInventoryTest {
     public void testInventoryRainyDay() {
         Inventory inventory = new Inventory();
         
-        System.out.println("*** Rainy Day Scenarios ***");
+        System.out.println("\n*** Testing Rainy Day Scenarios ***");
         System.out.println("Adding an invalid item (e.g. Lance) to backpack - passed test case = null return & no change in inventory");
         // try to add a lance - save the before inventory - confirm after inventory = before inventory
         String tempInventory = inventory.inventory();
-        assertEquals(inventory.takeItem("lance"), false);
+        assertFalse("Able to add lance to inventory", inventory.takeItem("lance"));
         assertEquals(inventory.inventory(), tempInventory);
         
         System.out.println("Removing a valid item (e.g. axe) that isn't in the backpack");
         tempInventory = inventory.inventory();
-        assertEquals(inventory.dropItem("axe"), false);
-        assertEquals(inventory.inventory(), tempInventory);
+        assertFalse("Able to Remove Axe from empty inventory", inventory.dropItem("axe"));
+        assertEquals("After NOT removing item, inventory changed", inventory.inventory(), tempInventory);
     }
 
 }
