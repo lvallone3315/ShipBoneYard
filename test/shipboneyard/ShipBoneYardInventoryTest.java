@@ -63,7 +63,7 @@ public class ShipBoneYardInventoryTest {
         assertEquals("Initial inventory is NOT empty", inventory.getInventory(), "");
         assertTrue("axe not added to inventory", inventory.takeItem("axe"));
         System.out.println("Verify backpack now has an axe" + "***" + inventory.getInventory()+"***");
-        assertEquals("axe is NOT in the inventory after adding", inventory.getInventory(), "axe");
+        assertEquals("axe is NOT in the inventory after adding", inventory.getInventory(), "axe\n");
         assertTrue("Not able to drop the axe", inventory.dropItem("axe"));
         System.out.println("Verify backpack is again empty" + "***" + inventory.getInventory()+"***");
         assertEquals("Inventory is NOT empty, but should be, after removing axe", inventory.getInventory(), "");

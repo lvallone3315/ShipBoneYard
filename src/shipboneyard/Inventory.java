@@ -64,7 +64,7 @@ public class Inventory {
     public String getInventory() {
         String inventoryString = "";
         for (Item.ItemType item : inventory) {
-            inventoryString += itemList.itemEnumToString(item);
+            inventoryString += itemList.itemEnumToString(item)+"\n";
         }
         return (inventoryString);
     }

@@ -21,16 +21,17 @@ public class Item {
     // ItemType maintains internal rep of all allowable items
     //   New items in game must be added to this enum
     // itemMap[] maps internal item rep to external display String
+    //
+    // To add new items to game:
+    //   create new ENUM and append to ItemType
+    //   define text version, e.g. "xyz", create map entry - enum, text
     public enum ItemType {BATTLE_AXE};
     EnumMap<ItemType, String> itemMap
             = new EnumMap<>(ItemType.class);
 
     // constructor - add all allowable items & String versions to map
-    //   New items in game must be added to this enum
     Item() {
         itemMap.put(ItemType.BATTLE_AXE, "axe");
-
-        // for (ItemType item : ItemType.values()) {
     }
     
     /**
