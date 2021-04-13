@@ -23,7 +23,7 @@ public class ShipBoneYard {
     
     // Version #, should be in separate file, e.g. version.txt
     //   update with every GIT commit
-    static final String VERSION = "Version 0.2\n";    // current version #
+    static final String VERSION = "Version 0.2 Inv\n";    // current version #
     
     static final int STARTING_ROOM = 0;  // ToDo: switch to enum
     static final String INTRO_1 = "\t\tWelcome to the Ship Boneyard Game\n\n"; 
