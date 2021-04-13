@@ -1,22 +1,32 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package shipboneyard;
 
 import java.util.EnumMap;
 
 /**
- *
+ * Item class
+ *   Maintains a list of valid items in the game, and
+ *   Maps internal item representation to external string (for displaying to user)
+ * <P>
+ * Game logic expected to use internal representation for all logic except user displays
+ * User input for items is checked against String versions stored in map
+ * 
+ * ToDo: future enhancement - allow different input versions to map to single item
+ *   e.g. "battle axe" & "axe" both map to BATTLE_AXE
+ * 
  * @author lvall
  */
 
 public class Item {
+    
+    // ItemType maintains internal rep of all allowable items
+    //   New items in game must be added to this enum
+    // itemMap[] maps internal item rep to external display String
     public enum ItemType {BATTLE_AXE};
     EnumMap<ItemType, String> itemMap
             = new EnumMap<>(ItemType.class);
 
+    // constructor - add all allowable items & String versions to map
+    //   New items in game must be added to this enum
     Item() {
         itemMap.put(ItemType.BATTLE_AXE, "axe");
 
@@ -25,7 +35,7 @@ public class Item {
     
     /**
      * Boolean isItemValid (String)
-     * @parm string representation of item being queried
+     * @parm itemString - string representation of item being checked
      * @return True if item valid, False if item invalid
      */
 

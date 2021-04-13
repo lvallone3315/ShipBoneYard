@@ -59,14 +59,14 @@ public class ShipBoneYardInventoryTest {
         Inventory inventory = new Inventory();
         
         System.out.println("\n*** Testing Sunny Day Scenarios ***");
-        System.out.println("Verify initial backpack is empty" + "***" + inventory.inventory()+"***");
-        assertEquals("Initial inventory is NOT empty", inventory.inventory(), "");
+        System.out.println("Verify initial backpack is empty" + "***" + inventory.getInventory()+"***");
+        assertEquals("Initial inventory is NOT empty", inventory.getInventory(), "");
         assertTrue("axe not added to inventory", inventory.takeItem("axe"));
-        System.out.println("Verify backpack now has an axe" + "***" + inventory.inventory()+"***");
-        assertEquals("axe is NOT in the inventory after adding", inventory.inventory(), "axe");
+        System.out.println("Verify backpack now has an axe" + "***" + inventory.getInventory()+"***");
+        assertEquals("axe is NOT in the inventory after adding", inventory.getInventory(), "axe");
         assertTrue("Not able to drop the axe", inventory.dropItem("axe"));
-        System.out.println("Verify backpack is again empty" + "***" + inventory.inventory()+"***");
-        assertEquals("Inventory is NOT empty, but should be, after removing axe", inventory.inventory(), "");
+        System.out.println("Verify backpack is again empty" + "***" + inventory.getInventory()+"***");
+        assertEquals("Inventory is NOT empty, but should be, after removing axe", inventory.getInventory(), "");
     }
     
     // Test rainy day scenarios
@@ -80,14 +80,14 @@ public class ShipBoneYardInventoryTest {
         System.out.println("\n*** Testing Rainy Day Scenarios ***");
         System.out.println("Adding an invalid item (e.g. Lance) to backpack - passed test case = null return & no change in inventory");
         // try to add a lance - save the before inventory - confirm after inventory = before inventory
-        String tempInventory = inventory.inventory();
+        String tempInventory = inventory.getInventory();
         assertFalse("Able to add lance to inventory", inventory.takeItem("lance"));
-        assertEquals(inventory.inventory(), tempInventory);
+        assertEquals(inventory.getInventory(), tempInventory);
         
         System.out.println("Removing a valid item (e.g. axe) that isn't in the backpack");
-        tempInventory = inventory.inventory();
+        tempInventory = inventory.getInventory();
         assertFalse("Able to Remove Axe from empty inventory", inventory.dropItem("axe"));
-        assertEquals("After NOT removing item, inventory changed", inventory.inventory(), tempInventory);
+        assertEquals("After NOT removing item, inventory changed", inventory.getInventory(), tempInventory);
     }
 
 }
