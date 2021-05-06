@@ -20,6 +20,12 @@ public class LogToConsole {
     //    ConsoleRedirect.setConsole();
     
     public static void log (String str){
+        System.out.print(str);
+    }
+    public static void logln (String str) {
+        System.out.println(str + "\n");
+    }
+    public static void logerr (String str) {
         System.err.print(str);
     }
 }

@@ -5,7 +5,6 @@
  */
 package shipboneyard;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -16,8 +15,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-// import javax.swing.JLabel;
-// import javax.swing.JOptionPane;
+
+import static shipboneyard.LogToConsole.log;
+import static shipboneyard.LogToConsole.logln;
 
 
 /**
@@ -53,17 +53,20 @@ class ShipBoneYardUI extends JFrame {
     static Scanner consoleInput;
     // static JFrame frame;
     
-    private static final int NUM_ROWS = 15;
+    private static final int NUM_ROWS = 25;
     private static final int NUM_COLUMNS = 60;
     private final Dimension WINDOW_SIZE = new Dimension(550, 700);
     private static final int FRAME_LENGTH = 800;
     private static final int FRAME_WIDTH = 600;
     private static final JTextArea gameTextArea = new JTextArea(NUM_COLUMNS, NUM_ROWS);
+    private static final JTextField userInputField = new JTextField(NUM_ROWS);
+    private static final JTextField promptField = new JTextField(15);
+        
+        
     
     static final String GAME_TEXT = "Ship Bone Yard game";
-    static final String DEFAULT_PROMPT = "> ";
-    
-    private static Log logUserInput = new Log();  // input logging setup
+    static final String DEFAULT_PROMPT = "What's up? ";
+    static String prompt = DEFAULT_PROMPT;
     
     /**
      * Constructor - set up JFRAME for Game Output
@@ -78,8 +81,7 @@ class ShipBoneYardUI extends JFrame {
         gameTextArea.setWrapStyleWord(true);
         gameTextArea.setEditable(true);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        final JTextField userInputField = new JTextField(NUM_ROWS);
-        
+
         userInputField.addActionListener(
             new ActionListener()
             {
@@ -90,20 +92,20 @@ class ShipBoneYardUI extends JFrame {
 
                         gameTextArea.append(fromUser + "\n\n");
                         gameTextArea.setCaretPosition(gameTextArea.getDocument().getLength());
-                        userInputField.setText("");
-                        System.out.println(fromUser);
+                        userInputField.setText("");  // clear user input box
+                        promptField.setText(DEFAULT_PROMPT);
+                        logln(fromUser);
                         drop.put(new String(fromUser));
                         try {
                             Thread.sleep(100);
                         } catch (InterruptedException ev) {}
-                        // String[] userInputArray = parser.parseInput(fromUser);
-                        // player.parse(userInputArray);
                     }
                 }
             }
         );
         this.setLayout(new FlowLayout());
         this.add(userInputField, SwingConstants.CENTER);
+        this.add(promptField, SwingConstants.CENTER);
         this.add(scrollPane, SwingConstants.CENTER);
         this.setSize(FRAME_WIDTH, FRAME_LENGTH);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -120,34 +122,20 @@ class ShipBoneYardUI extends JFrame {
         gameTextArea.append(printString);
     }
     
+    /**
+     * setPrompt() display specified String in prompt section of frame
+     *    overwritten in input processor after user inputs next command
+     * @param userPrompt set user prompt for next command (only)
+     */
+    static void setPrompt(String userPrompt) {
+        promptField.setText(userPrompt);
+    }
+    
     // print to console
-    //  expect to replace this method, printConsole(), with log()
+    //  legacy method, replaced with logToConsole.log()
     static void printConsole(String printString) {
-        System.out.print(printString);
+        logln(printString);
     }
-
-    // get user input e.g. move, pickup, etc.
-    //   getGameInput(<string>) - displays string in JOptionPane & gets input
-    //   getGameInput() - displays a default string & gets input
-    //
-    // for now, JOptionPane works okay, but is a little clunky
-    // the good - contained in JFrame & blocks until input entered
-    // the bad - fixed position in frame & not really console friendly
-    //
-    // needs careful redesign
-    // how to get input from UI in a natural way and keep main loop control
-
-    /* static String getGameInput(String output) {
-        String input = JOptionPane.showInputDialog(frame, output);
-        logUserInput.logUserInput(input);
-        return input;
-    }
-    static String getGameInput() {
-        String input = JOptionPane.showInputDialog(frame, DEFAULT_PROMPT);
-        logUserInput.logUserInput(input);
-        return input;
-    }
-    */
     
     // No longer used - takes input from console
     //  won't work well in a JAR version
