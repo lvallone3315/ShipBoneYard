@@ -3,8 +3,8 @@ package shipboneyard;
 
 
 import static shipboneyard.ShipBoneYardUI.printGameOutput;  // save typing
-import static shipboneyard.ShipBoneYardUI.printConsole;  // save typing
-import static shipboneyard.ShipBoneYardUI.getGameInput; 
+import static shipboneyard.ShipBoneYardUI.printConsole;
+import static shipboneyard.ShipBoneYardUI.getGameInput2; 
 import static shipboneyard.PlayerInput.InputType;
 import static shipboneyard.LogToConsole.log;
 
@@ -23,9 +23,8 @@ public class ShipBoneYard {
     
     // Version #, should be in separate file, e.g. version.txt
     //   update with every GIT commit
-    static final String VERSION = "Version 0.2\n";    // current version #
+    static final String VERSION = "Version 0.3\n";    // current version #
     
-    static final int STARTING_ROOM = 0;  // ToDo: switch to enum
     static final String INTRO_1 = "\t\tWelcome to the Ship Boneyard Game\n\n"; 
     static final String INTRO_2 = "game text area - Wreck of the Edmund Fitzgerald\n";
     static final String DESCRIPTION = 
@@ -34,6 +33,7 @@ public class ShipBoneYard {
             + "You can move around with simple commands (e.g. north)\n"
             + "Please close the window or type <exit> to quit the game\n";
     static final String PLAYER_NAME_REQ = "Enter player name> ";
+    static final String QUIT_MESSAGE = "Game Over - Hope to see you again!\n";
 
     /**
      * @param args the command line arguments (none at this time)
@@ -53,76 +53,78 @@ public class ShipBoneYard {
      */
     public static void main(String[] args) {
         // Print game intro on console
-        System.out.println(INTRO_1);
-        System.out.println(VERSION);
+        log(INTRO_1);
+        log(VERSION);
         
+
         // Initialize UI and test output
-        ShipBoneYardUI ui = new ShipBoneYardUI();  // setup game window, ui unused
-        printGameOutput(INTRO_1);
-        printGameOutput(VERSION);
-        printGameOutput(DESCRIPTION);
-        log("This is the console output\n");
-        
-        
-        // Initial player
-        Player player = new Player();  // prints welcome message too
+        // UI output methods are static, enabling access from anywhere in game objects
+        Drop drop = new Drop();
+        ShipBoneYardUI ui = new ShipBoneYardUI(drop);  // setup game window, ui unused
+        ui.printGameOutput(INTRO_1);
+        ui.printGameOutput(VERSION);
+        ui.printGameOutput(DESCRIPTION);
+        log("Ship Boneyard - This is the console output\n");
  
+        //          Player Initialization
         // Request user to enter player name
         //   if no player name entered, player class will use a default name
         //   if player name entered - print welcome message to game window
-        String playerName = getGameInput(PLAYER_NAME_REQ);
+        Player player = new Player(); 
+        ui.printGameOutput(PLAYER_NAME_REQ);
+        ui.setPrompt(PLAYER_NAME_REQ);
+        String playerName = drop.take();
         if (!playerName.equals("")) {
             player.setPlayerName(playerName);
             player.printPlayerName();  // prints new player name to log
         }
-        ShipBoneYardUI.printGameOutput("Welcome " + player.getPlayerName() + "\n");
+        ui.printGameOutput("Welcome " + player.getPlayerName() + "\n");
         
-        // initialize starting location
+        //     Starting location & input parser initialization
         Room room = Room.startingRoom();
-        
-        // Initialize parser
         ParseInput parser = new ParseInput();
         
-        // Main loop
-        //   get first player input - maybe use do While instead
+        //                 Main loop
+        //   
         //   while player hasn't quit
-        //      get player's input (ie typing)
+        //      player's input (ie typing) - drop.take blocks until input avail
         //      send input to room logic (derived object of Room base class)
         //      move to new room (if applicable)
         //
+        // drop = message passing from GUI - see Drop class
+        //
         // ToDo:
-        //   Move prompts to constants
         //   Consider moving description print elsewhere (and using short des if visited)
-        //   Define an exit type in the parser (ie accept done, quit, exit...)
-        String input = getGameInput("What's up?> ");
-        PlayerInput playerInput = parser.parseInput(input);
-        while (playerInput.getInputType() != InputType.EXIT) {
-  
-            // echo player's input to game screen
-            printGameOutput(playerInput.getPlayerText()+"\n");
+        
+        while (true) {
+            String input = drop.take();  // receive user input from GUI thread
+            log(String.format("MESSAGE RECEIVED: %s\n", input));
+            
+            // parse input, UI echos to game screen
+            PlayerInput playerInput = parser.parseInput(input);
+
+            // check if user is tired of this and wants to quit
+            if (playerInput.getInputType() == InputType.EXIT) {
+                ui.printGameOutput(QUIT_MESSAGE);
+                try {             // sleep 5 seconds & exit
+                    Thread.sleep(5000);
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+                System.exit (0);
+            }
             
             // switch on type of input - e.g. move in a direction
             // process method returns pointer to next (or same) room
             room = room.processUserRequest(playerInput);
-            printGameOutput(room.getLongDescription());
+            ui.printGameOutput(room.getLongDescription());
                // log room info to console - maybe do this in room class
-            room.printCurrentRoom();  
-            
-            // next input line
-            input = getGameInput("What's up?> ");
-            playerInput = parser.parseInput(input);
-        }
-        
-        printGameOutput("All done!\n");
-        
-        // sleep 5 seconds & exit
-        //   *** redo this later - maybe ask for key to exit
-        try {
-            Thread.sleep(5000);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        System.exit(0);
+            room.printCurrentRoom();
+
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {}
+        }  // end main game loop to read input & process move
             
     }
 }
