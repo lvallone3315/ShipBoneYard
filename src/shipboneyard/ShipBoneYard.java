@@ -4,7 +4,7 @@ package shipboneyard;
 
 import static shipboneyard.ShipBoneYardUI.printGameOutput;  // save typing
 import static shipboneyard.ShipBoneYardUI.printConsole;  // save typing
-import static shipboneyard.ShipBoneYardUI.getGameInput; 
+import static shipboneyard.ShipBoneYardUI.getGameInput2; 
 import static shipboneyard.PlayerInput.InputType;
 import static shipboneyard.LogToConsole.log;
 
@@ -58,9 +58,9 @@ public class ShipBoneYard {
         
         // Initialize UI and test output
         ShipBoneYardUI ui = new ShipBoneYardUI();  // setup game window, ui unused
-        printGameOutput(INTRO_1);
-        printGameOutput(VERSION);
-        printGameOutput(DESCRIPTION);
+        ui.printGameOutput(INTRO_1);
+        ui.printGameOutput(VERSION);
+        ui.printGameOutput(DESCRIPTION);
         log("This is the console output\n");
         
         
@@ -70,12 +70,12 @@ public class ShipBoneYard {
         // Request user to enter player name
         //   if no player name entered, player class will use a default name
         //   if player name entered - print welcome message to game window
-        String playerName = getGameInput(PLAYER_NAME_REQ);
+        String playerName = ui.getGameInput2(PLAYER_NAME_REQ);
         if (!playerName.equals("")) {
             player.setPlayerName(playerName);
             player.printPlayerName();  // prints new player name to log
         }
-        ShipBoneYardUI.printGameOutput("Welcome " + player.getPlayerName() + "\n");
+        ui.printGameOutput("Welcome " + player.getPlayerName() + "\n");
         
         // initialize starting location
         Room room = Room.startingRoom();
@@ -94,26 +94,26 @@ public class ShipBoneYard {
         //   Move prompts to constants
         //   Consider moving description print elsewhere (and using short des if visited)
         //   Define an exit type in the parser (ie accept done, quit, exit...)
-        String input = getGameInput("What's up?> ");
+        String input = ui.getGameInput2("What's up?> ");
         PlayerInput playerInput = parser.parseInput(input);
         while (playerInput.getInputType() != InputType.EXIT) {
   
             // echo player's input to game screen
-            printGameOutput(playerInput.getPlayerText()+"\n");
+            ui.printGameOutput(playerInput.getPlayerText()+"\n");
             
             // switch on type of input - e.g. move in a direction
             // process method returns pointer to next (or same) room
             room = room.processUserRequest(playerInput);
-            printGameOutput(room.getLongDescription());
+            ui.printGameOutput(room.getLongDescription());
                // log room info to console - maybe do this in room class
             room.printCurrentRoom();  
             
             // next input line
-            input = getGameInput("What's up?> ");
+            input = ui.getGameInput2("What's up?> ");
             playerInput = parser.parseInput(input);
         }
         
-        printGameOutput("All done!\n");
+        ui.printGameOutput("All done!\n");
         
         // sleep 5 seconds & exit
         //   *** redo this later - maybe ask for key to exit
