@@ -25,13 +25,14 @@ public class Item {
     // To add new items to game:
     //   create new ENUM and append to ItemType
     //   define text version, e.g. "xyz", create map entry - enum, text
-    public enum ItemType {BATTLE_AXE};
+    public enum ItemType {BATTLE_AXE, MACE};
     EnumMap<ItemType, String> itemMap
             = new EnumMap<>(ItemType.class);
 
     // constructor - add all allowable items & String versions to map
     Item() {
         itemMap.put(ItemType.BATTLE_AXE, "axe");
+        itemMap.put(ItemType.MACE, "mace");
     }
     
     /**

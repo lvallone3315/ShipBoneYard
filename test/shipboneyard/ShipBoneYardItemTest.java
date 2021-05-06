@@ -35,8 +35,10 @@ public class ShipBoneYardItemTest {
         Item item = new Item();
         System.out.println("testing if axe is a valid item ...");
         assertTrue("Axe is NOT valid",item.isItemValid("axe"));
+        System.out.println("testing if mace is a valid item ...");
+        assertTrue("Mace is NOT valid",item.isItemValid("mace"));
         System.out.println("Verifying mace is not a valid item ...");
-        assertFalse("Mace IS valid", item.isItemValid("mace"));
+        assertFalse("lance IS valid", item.isItemValid("lance"));
     }
     
     @Test
