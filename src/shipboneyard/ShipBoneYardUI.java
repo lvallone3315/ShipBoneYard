@@ -68,7 +68,7 @@ class ShipBoneYardUI extends JFrame {
     /**
      * Constructor - set up JFRAME for Game Output
      */
-    ShipBoneYardUI() {
+    ShipBoneYardUI(Drop drop) {
         super(GAME_TEXT);
         // frame = new JFrame();
         JScrollPane scrollPane = new JScrollPane(gameTextArea);
@@ -92,6 +92,10 @@ class ShipBoneYardUI extends JFrame {
                         gameTextArea.setCaretPosition(gameTextArea.getDocument().getLength());
                         userInputField.setText("");
                         System.out.println(fromUser);
+                        drop.put(new String(fromUser));
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException ev) {}
                         // String[] userInputArray = parser.parseInput(fromUser);
                         // player.parse(userInputArray);
                     }

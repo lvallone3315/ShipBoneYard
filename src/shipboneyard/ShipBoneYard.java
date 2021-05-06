@@ -23,7 +23,7 @@ public class ShipBoneYard {
     
     // Version #, should be in separate file, e.g. version.txt
     //   update with every GIT commit
-    static final String VERSION = "Version 0.2\n";    // current version #
+    static final String VERSION = "Version 0.3\n";    // current version #
     
     static final int STARTING_ROOM = 0;  // ToDo: switch to enum
     static final String INTRO_1 = "\t\tWelcome to the Ship Boneyard Game\n\n"; 
@@ -56,8 +56,10 @@ public class ShipBoneYard {
         System.out.println(INTRO_1);
         System.out.println(VERSION);
         
+
         // Initialize UI and test output
-        ShipBoneYardUI ui = new ShipBoneYardUI();  // setup game window, ui unused
+        Drop drop = new Drop();
+        ShipBoneYardUI ui = new ShipBoneYardUI(drop);  // setup game window, ui unused
         ui.printGameOutput(INTRO_1);
         ui.printGameOutput(VERSION);
         ui.printGameOutput(DESCRIPTION);
@@ -70,7 +72,8 @@ public class ShipBoneYard {
         // Request user to enter player name
         //   if no player name entered, player class will use a default name
         //   if player name entered - print welcome message to game window
-        String playerName = ui.getGameInput2(PLAYER_NAME_REQ);
+        ui.printGameOutput(PLAYER_NAME_REQ);
+        String playerName = drop.take();
         if (!playerName.equals("")) {
             player.setPlayerName(playerName);
             player.printPlayerName();  // prints new player name to log
@@ -90,14 +93,20 @@ public class ShipBoneYard {
         //      send input to room logic (derived object of Room base class)
         //      move to new room (if applicable)
         //
+        // drop = message passing from GUI - see Drop class
+        //
         // ToDo:
         //   Move prompts to constants
         //   Consider moving description print elsewhere (and using short des if visited)
         //   Define an exit type in the parser (ie accept done, quit, exit...)
-        String input = ui.getGameInput2("What's up?> ");
-        PlayerInput playerInput = parser.parseInput(input);
-        while (playerInput.getInputType() != InputType.EXIT) {
-  
+
+
+        
+        while (true) {
+            String input = drop.take();  // receive user input from GUI
+            System.out.format("MESSAGE RECEIVED: %s\n", input);
+            
+            PlayerInput playerInput = parser.parseInput(input);
             // echo player's input to game screen
             ui.printGameOutput(playerInput.getPlayerText()+"\n");
             
@@ -106,23 +115,23 @@ public class ShipBoneYard {
             room = room.processUserRequest(playerInput);
             ui.printGameOutput(room.getLongDescription());
                // log room info to console - maybe do this in room class
-            room.printCurrentRoom();  
-            
-            // next input line
-            input = ui.getGameInput2("What's up?> ");
-            playerInput = parser.parseInput(input);
-        }
-        
-        ui.printGameOutput("All done!\n");
-        
-        // sleep 5 seconds & exit
-        //   *** redo this later - maybe ask for key to exit
-        try {
-            Thread.sleep(5000);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        System.exit(0);
+            room.printCurrentRoom();
+            if (playerInput.getInputType() == InputType.EXIT) {
+                ui.printGameOutput("All done!\n");
+                try {
+                    // sleep 5 seconds & exit
+                    //   *** redo this later - maybe ask for key to exit
+                    Thread.sleep(5000);
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+                System.exit (0);
+            }
+
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {}
+        }  // end main game loop to read input & process move
             
     }
 }
